@@ -1,35 +1,37 @@
-const express = require('express');
-const mongoose = require('mongoose');
-require('dotenv').config();
+const express = require("express");
+const mongoose = require("mongoose");
+require("dotenv").config();
 const app = express();
 app.use(express.json());
-const PORT = Number(process.env.PORT) || 4000
+const PORT = Number(process.env.PORT) || 4000;
 
-const Note = require('./models/note.js'); //Note model
+const Note = require("./models/note.js"); //Note model
 
+//signup route
+const signeupRoute = require("./routes/signup");
+app.use("/", signeupRoute);
 
-const signeupRoute = require('./routes/signup');
-app.use('/api' , signeupRoute);
+//login route
+const loginRoute = require("./routes/login.js");
+app.use("/", loginRoute);
 
-const notesRoute = require('./routes/notes')
-app.use('/' , notesRoute);
+//middleware
+const verifyTokenMiddlware = require("./middleware/verifyToken.js");
 
-const loginRoute = require('./routes/login.js');
-app.use('/api' , loginRoute);
+//notes route
+const notesRoute = require("./routes/notes");
+app.use("/home/notes", verifyTokenMiddlware, notesRoute);
 
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("Connection To Mongo Succeded");
 
-mongoose.connect(process.env.MONGO_URI).then( () =>{
-
-console.log('Connection To Mongo Succeded');
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-}
-).catch( (err) => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1); })
-
-
-
-
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  });

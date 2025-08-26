@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Note = require('../models/note')
 
-router.post('/home/notes', async (req,res) => {
+router.post('/', async (req,res) => {
     const title = req.body.title;
     const content = req.body.note;
     const newNote = new Note({title , content}); 
@@ -17,7 +17,7 @@ router.post('/home/notes', async (req,res) => {
 })
 
 
-router.get('/home/notes' , async (req,res) => {
+router.get('/' , async (req,res) => {
 
     try {
     const allNotes = await Note.find().sort({ createdAt: -1 });
@@ -30,7 +30,7 @@ router.get('/home/notes' , async (req,res) => {
 
 
 
-router.delete('/home/notes/:id', async (req,res) => {
+router.delete('/:id', async (req,res) => {
     const id = req.params.id;
     try {
     await Note.findByIdAndDelete(id)
@@ -44,7 +44,7 @@ router.delete('/home/notes/:id', async (req,res) => {
 
 
 
-router.put('/home/notes/:id', async (req,res) => {
+router.put('/:id', async (req,res) => {
     const id = req.params.id;
     const newTitle = req.body.title; //new title
     const newNote = req.body.note; //new content
