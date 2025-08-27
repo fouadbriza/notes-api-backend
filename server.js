@@ -3,6 +3,13 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const app = express();
 app.use(express.json());
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'https://notes-app-frontend-gray-seven.vercel.app',
+  credentials: true
+}));
+
 const PORT = Number(process.env.PORT) || 4000;
 
 const Note = require("./models/note.js"); //Note model
