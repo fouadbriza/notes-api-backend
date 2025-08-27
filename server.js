@@ -5,10 +5,22 @@ const app = express();
 app.use(express.json());
 const cors = require('cors');
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.PREVIEW_URL
+];
+
 app.use(cors({
-  origin: 'https://notes-app-frontend-gray-seven.vercel.app',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
+
 
 const PORT = Number(process.env.PORT) || 4000;
 
