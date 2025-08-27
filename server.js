@@ -10,6 +10,11 @@ const allowedOrigins = [
   process.env.PREVIEW_URL
 ];
 
+app.use((req, res, next) => {
+  console.log('Incoming Origin:', req.headers.origin);
+  next();
+});
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
